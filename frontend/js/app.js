@@ -123,6 +123,14 @@ async function carregarDetalhesDocumento(docId) {
         }
 
         document.getElementById('docTitle').textContent = doc.titulo;
+
+        const descElement = document.getElementById('docDescricao');
+        if (doc.descricao && doc.descricao.trim() !== "") {
+            descElement.textContent = doc.descricao;
+        } else {
+            descElement.style.display = 'none';
+}
+
         document.getElementById('docDate').textContent = new Date(doc.data_upload.replace(' ', 'T') + 'Z').toLocaleString('pt-BR');
         document.getElementById('downloadBtn').href = `${API_BASE_URL}/documentos/${docId}/download`;
 

@@ -24,7 +24,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-UPLOAD_DIR = "backend/uploads"
+UPLOAD_DIR = os.getenv("UPLOAD_DIR", "backend/uploads")
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
@@ -85,6 +85,7 @@ def listar_documentos(db: Session = Depends(get_db)):
         {
             "id": doc.id,
             "titulo": doc.titulo,
+            "descricao": doc.descricao,
             "data_upload": doc.data_upload
         }
         for doc in documentos
