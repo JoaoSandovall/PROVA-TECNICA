@@ -97,3 +97,33 @@ a.button-link {
 a.button-link:hover {
     background-color: #004494;
 }
+
+.back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    text-decoration: none;
+    color: var(--primary-color);
+    margin-bottom: 25px;
+    font-weight: bold;
+    font-size: 15px;
+}
+
+.back-link:hover {
+    color: #004494;
+}
+
+.back-link img {
+    width: 16px;
+    height: 16px;
+}
+
+#downloadBtn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+#downloadBtn img {
+    width: 18px;
+    height: 18px;
+}
