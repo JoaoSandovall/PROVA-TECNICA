@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestão de Documentos</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="card">
+            <h1>Upload de Documento</h1>
+            <form id="uploadForm">
+                <div class="form-group">
+                    <label for="titulo">Título do Documento *</label>
+                    <input type="text" id="titulo" name="titulo" required>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição (Opcional)</label>
+                    <textarea id="descricao" name="descricao" rows="3"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="arquivo">Arquivo (PDF, JPG, PNG) *</label>
+                    <input type="file" id="arquivo" name="arquivo" accept=".pdf, .jpg, .jpeg, .png" required>
+                </div>
+                <button type="submit">Enviar Documento</button>
+            </form>
+        </div>
+
+        <div class="card">
+            <h2>Documentos Cadastrados</h2>
+            
+            <div id="documentList">
+                <p>Carregando documentos...</p>
+            </div>
+
+        </div>
+
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>

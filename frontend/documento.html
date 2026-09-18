@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Detalhes do Documento</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <div class="container">
+        
+        <div class="card">
+            <a href="index.html" style="text-decoration: none; color: #0056b3;">&larr; Voltar para a lista</a>
+            <h1 id="docTitle">Carregando documento...</h1>
+            <p id="docDate" class="date-text"></p>
+            <div style="margin-top: 15px;">
+                <a id="downloadBtn" href="#" class="button-link" target="_blank">Baixar Arquivo</a>
+            </div>
+        </div>
+
+        <div class="card">
+            <h2>Histórico de Comentários</h2>
+            <div id="commentList" style="margin-bottom: 20px;">
+                <p>Carregando comentários...</p>
+            </div>
+            
+            <form id="commentForm">
+                <div class="form-group">
+                    <label for="comentarioTexto">Novo Comentário</label>
+                    <textarea id="comentarioTexto" name="texto" required rows="3"></textarea>
+                </div>
+                <button type="submit">Adicionar Comentário</button>
+            </form>
+        </div>
+
+    </div>
+    <script src="js/app.js"></script>
+</body>
+</html>
