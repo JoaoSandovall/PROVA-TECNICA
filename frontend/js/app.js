@@ -48,7 +48,7 @@ async function carregarDocumentos() {
             const docElement = document.createElement('div');
             docElement.className = 'document-item';
             
-            const dataFormatada = new Date(doc.data_upload).toLocaleString('pt-BR');
+            const dataFormatada = new Date(doc.data_upload.replace(' ', 'T') + 'Z').toLocaleString('pt-BR');
             
             docElement.innerHTML = `
                 <div>
@@ -123,7 +123,7 @@ async function carregarDetalhesDocumento(docId) {
         }
 
         document.getElementById('docTitle').textContent = doc.titulo;
-        document.getElementById('docDate').textContent = new Date(doc.data_upload).toLocaleString('pt-BR');
+        document.getElementById('docDate').textContent = new Date(doc.data_upload.replace(' ', 'T') + 'Z').toLocaleString('pt-BR');
         document.getElementById('downloadBtn').href = `${API_BASE_URL}/documentos/${docId}/download`;
 
     } catch (erro) {
@@ -151,7 +151,7 @@ async function carregarComentarios(docId) {
             const comElement = document.createElement('div');
             comElement.className = 'comment-item';
             
-            const dataFormatada = new Date(com.data_hora_registro).toLocaleString('pt-BR');
+            const dataFormatada = new Date(com.data_hora_registro.replace(' ', 'T') + 'Z').toLocaleString('pt-BR');
             
             comElement.innerHTML = `
                 <div>
