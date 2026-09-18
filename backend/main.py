@@ -4,9 +4,10 @@ from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException, status
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 from backend.database import engine, Base, get_db
-from backend.models import Documento
+from backend.models import Documento, Comentario
 
 # criação das tabelas no banco de dados na inicialização
 Base.metadata.create_all(bind=engine)
@@ -17,6 +18,9 @@ UPLOAD_DIR = "backend/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
 
 ALLOWED_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
+
+class ComentarioCreate(BaseModel):
+    texto: str
 
 @app.post("/api/documentos/", status_code=status.HTTP_201_CREATED)
 def upload_documento(
@@ -96,3 +100,49 @@ def download_documento(id: int, db: Session = Depends(get_db)):
         path=documento.caminho_armazenamento,
         filename=documento.nome_arquivo_original
     )
+
+@app.post("/api/documentos/{id}/comentarios", status_code=status.HTTP_201_CREATED)
+def adicionar_comentario(id: int, payload: ComentarioCreate, db: Session = Depends(get_db)):
+    documento = db.query(Documento).filter(Documento.id == id).first()
+    
+    if not documento:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Registro de documento não encontrado."
+        )
+    
+    novo_comentario = Comentario(
+        documento_id=id,
+        texto=payload.texto
+    )
+    
+    db.add(novo_comentario)
+    db.commit()
+    db.refresh(novo_comentario)
+    
+    return {
+        "id": novo_comentario.id,
+        "texto": novo_comentario.texto,
+        "data_hora_registro": novo_comentario.data_hora_registro
+    }
+
+@app.get("/api/documentos/{id}/comentarios", status_code=status.HTTP_200_OK)
+def listar_comentarios(id: int, db: Session = Depends(get_db)):
+    documento = db.query(Documento).filter(Documento.id == id).first()
+    
+    if not documento:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Registro de documento não encontrado."
+        )
+    
+    comentarios = db.query(Comentario).filter(Comentario.documento_id == id).order_by(Comentario.data_hora_registro.asc()).all()
+    
+    return [
+        {
+            "id": com.id,
+            "texto": com.texto,
+            "data_hora_registro": com.data_hora_registro
+        }
+        for com in comentarios
+    ]
