@@ -162,11 +162,12 @@ async function carregarComentarios(docId) {
             const dataFormatada = new Date(com.data_hora_registro.replace(' ', 'T') + 'Z').toLocaleString('pt-BR');
             
             comElement.innerHTML = `
-                <div>
-                    <p style="margin: 0 0 5px 0;">${com.texto}</p>
+                <div class="comment-wrapper">
+                    <p class="comment-text">${com.texto}</p>
                     <span class="date-text">${dataFormatada}</span>
                 </div>
             `;
+            
             commentList.appendChild(comElement);
         });
     } catch (erro) {
