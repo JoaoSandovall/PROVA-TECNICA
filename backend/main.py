@@ -2,6 +2,7 @@ import os
 import shutil
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException, status
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 
 from backend.database import engine, Base, get_db
@@ -61,3 +62,37 @@ def upload_documento(
         "titulo": novo_documento.titulo,
         "mensagem": "Upload e registro realizados com sucesso."
     }
+
+@app.get("/api/documentos/", status_code=status.HTTP_200_OK)
+def listar_documentos(db: Session = Depends(get_db)):
+    documentos = db.query(Documento).order_by(Documento.data_upload.desc()).all()
+    
+    return [
+        {
+            "id": doc.id,
+            "titulo": doc.titulo,
+            "data_upload": doc.data_upload
+        }
+        for doc in documentos
+    ]
+
+@app.get("/api/documentos/{id}/download", status_code=status.HTTP_200_OK)
+def download_documento(id: int, db: Session = Depends(get_db)):
+    documento = db.query(Documento).filter(Documento.id == id).first()
+    
+    if not documento:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Registro de documento não encontrado."
+        )
+    
+    if not os.path.exists(documento.caminho_armazenamento):
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="Arquivo físico não localizado no armazenamento do servidor."
+        )
+        
+    return FileResponse(
+        path=documento.caminho_armazenamento,
+        filename=documento.nome_arquivo_original
+    )
