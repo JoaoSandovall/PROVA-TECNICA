@@ -3,6 +3,8 @@ import shutil
 from datetime import datetime
 from fastapi import FastAPI, UploadFile, File, Form, Depends, HTTPException, status
 from fastapi.responses import FileResponse
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from sqlalchemy.orm import Session
 from pydantic import BaseModel
 
@@ -13,6 +15,14 @@ from backend.models import Documento, Comentario
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="API de Gestão de Documentos")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 UPLOAD_DIR = "backend/uploads"
 os.makedirs(UPLOAD_DIR, exist_ok=True)
@@ -146,3 +156,5 @@ def listar_comentarios(id: int, db: Session = Depends(get_db)):
         }
         for com in comentarios
     ]
+
+app.mount("/", StaticFiles(directory="frontend", html=True), name="frontend")
