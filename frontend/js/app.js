@@ -167,7 +167,7 @@ async function carregarComentarios(docId) {
                     <span class="date-text">${dataFormatada}</span>
                 </div>
             `;
-            
+
             commentList.appendChild(comElement);
         });
     } catch (erro) {
